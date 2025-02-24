@@ -26,15 +26,30 @@ public class UserServiceTest {
     @Test
     public void testRegisterUser() {
         User user = new User();
+        User user1 =new User();
+
         user.setUsername("testuser");
         user.setPassword("password");
+
+        user1.setUsername("admin");
+        user1.setPassword("admin");
+
+
 
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(userRepository.save(user)).thenReturn(user);
 
+
+        when(passwordEncoder.encode("admin")).thenReturn("encodedPassword");
+        when(userRepository.save(user1)).thenReturn(user);
+
         User savedUser = userService.registerUser(user);
+        User savedUser1 = userService.registerUser(user1);
 
         assertEquals("encodedPassword", savedUser.getPassword());
         verify(userRepository, times(1)).save(user);
+
+        assertEquals("encodedPassword", savedUser1.getPassword());
+        verify(userRepository, times(1)).save(user1);
     }
 }
